@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para você</title>
+    <title>Para Você</title>
     <style>
-        /* Estilo Void: Minimalista e Fofo */
         body {
             margin: 0;
             padding: 0;
@@ -14,72 +13,82 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #444;
-            text-align: center;
+            background: #f8e1f4;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ff6b6b;
+            overflow: hidden;
+        }
+
+        /* Tulipa em Pixel Art (CSS Puro) */
+        .pixel-tulip {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            background: #ff4d6d;
+            box-shadow: 
+                0 -10px 0 #ff4d6d, 10px -10px 0 #ff4d6d, -10px -10px 0 #ff4d6d,
+                0 -20px 0 #ff758f, 10px -20px 0 #ff758f, -10px -20px 0 #ff758f,
+                20px -10px 0 #c9184a, -20px -10px 0 #c9184a;
+            margin-bottom: 40px;
+            animation: beat 0.6s infinite alternate; /* Batida da música */
+        }
+        .pixel-tulip::after {
+            content: '';
+            position: absolute;
+            top: 60px; left: 25px;
+            width: 10px; height: 40px;
+            background: #52b788;
+            box-shadow: 10px 10px 0 #52b788, -10px 15px 0 #52b788;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.15); }
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.6);
-            padding: 40px 20px;
-            border-radius: 30px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            width: 85%;
-            max-width: 400px;
-            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 2;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 4px solid #ff4d6d;
         }
 
-        .tulipa {
-            font-size: 70px;
-            margin-bottom: 15px;
-            display: inline-block;
-            animation: pulse 2.5s infinite ease-in-out;
-        }
+        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        @keyframes pulse {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        h1 { font-size: 1.6rem; color: #ff6b6b; margin-bottom: 10px; }
-        p { font-size: 1.1rem; line-height: 1.4; margin-bottom: 25px; }
-
-        .player {
-            width: 100%;
-            border-radius: 20px;
+        .yt-player {
+            margin-top: 20px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 2px solid #52b788;
         }
 
         .runner {
-            display: block;
-            margin-top: 25px;
-            font-size: 24px;
-            animation: moveRunner 8s linear infinite;
+            position: absolute;
+            bottom: 20px;
+            font-size: 2rem;
+            animation: run 10s linear infinite;
         }
 
-        @keyframes moveRunner {
-            0% { transform: translateX(-150px); }
-            100% { transform: translateX(150px); }
+        @keyframes run {
+            from { left: -100px; }
+            to { left: 100%; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="tulipa">🌷</div>
-        <h1>Para quem brilha correndo</h1>
-        <p>Renato aqui.<br>Vi essa tulipa e lembrei do seu corre. <b>Changes</b> pra te acompanhar no próximo treino!</p>
+        <div class="pixel-tulip"></div>
+        <h1>Para quem brilha no corre</h1>
+        <p>Changes.</p>
         
-        <div class="player">
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2S33Z5v1S99vI39H9vC4mY?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <div class="yt-player">
+            <iframe width="280" height="157" src="https://www.youtube.com/embed/S_I_ZpHeC_A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-
-        <div class="runner">🏃‍♀️💨</div>
     </div>
+
+    <div class="runner">🏃‍♀️💨</div>
 
 </body>
 </html>
