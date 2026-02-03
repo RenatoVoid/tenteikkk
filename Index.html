@@ -3,92 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Você</title>
+    <title>Changes</title>
     <style>
-        body {
+        /* --- CONFIGURAÇÕES GERAIS --- */
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            background: #0f0c29; /* Fundo escuro inicial */
+        }
+
+        /* Fundo Animado (Aurora Boreal Vibe) */
+        .background-gradient {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #240b36, #c31432, #240b36);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- PÉTALAS CAINDO (PARTÍCULAS) --- */
+        .petals {
+            position: absolute;
+            top: -10%;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .petal {
+            position: absolute;
+            background: rgba(255, 192, 203, 0.6);
+            border-radius: 10px 0 10px 0;
+            animation: fall linear infinite;
+        }
+        
+        /* Geração aleatória via CSS (simulação) */
+        .petal:nth-child(1) { left: 10%; width: 10px; height: 10px; animation-duration: 8s; animation-delay: 0s; }
+        .petal:nth-child(2) { left: 30%; width: 15px; height: 15px; animation-duration: 12s; animation-delay: 2s; }
+        .petal:nth-child(3) { left: 70%; width: 8px; height: 8px; animation-duration: 6s; animation-delay: 4s; }
+        .petal:nth-child(4) { left: 50%; width: 12px; height: 12px; animation-duration: 10s; animation-delay: 1s; }
+        .petal:nth-child(5) { left: 85%; width: 14px; height: 14px; animation-duration: 9s; animation-delay: 3s; }
+
+        @keyframes fall {
+            0% { top: -10%; transform: rotate(0deg) translateX(0); }
+            100% { top: 110%; transform: rotate(360deg) translateX(50px); }
+        }
+
+        /* --- TELA DE INTRODUÇÃO --- */
+        #intro-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s;
+        }
+        .btn-start {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            color: #fff;
+            border: 2px solid #ff4d6d;
+            background: transparent;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px #ff4d6d;
+            animation: pulseBtn 2s infinite;
+        }
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 10px #ff4d6d; }
+            50% { box-shadow: 0 0 25px #ff4d6d, 0 0 5px #fff; }
+            100% { box-shadow: 0 0 10px #ff4d6d; }
+        }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .main-content {
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background: #f8e1f4;
-            font-family: 'Courier New', Courier, monospace;
-            color: #ff6b6b;
-            overflow: hidden;
+            height: 100vh;
+            opacity: 0; /* Escondido inicialmente */
+            transition: opacity 2s ease-in;
         }
 
-        /* Tulipa em Pixel Art (CSS Puro) */
+        /* TULIPA PIXEL ABSURDA */
         .pixel-tulip {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
             position: relative;
-            width: 60px;
-            height: 60px;
-            background: #ff4d6d;
+            /* Pixel Art via CSS Box Shadow */
+            background: transparent;
             box-shadow: 
-                0 -10px 0 #ff4d6d, 10px -10px 0 #ff4d6d, -10px -10px 0 #ff4d6d,
-                0 -20px 0 #ff758f, 10px -20px 0 #ff758f, -10px -20px 0 #ff758f,
-                20px -10px 0 #c9184a, -20px -10px 0 #c9184a;
-            margin-bottom: 40px;
-            animation: beat 0.6s infinite alternate; /* Batida da música */
-        }
-        .pixel-tulip::after {
-            content: '';
-            position: absolute;
-            top: 60px; left: 25px;
-            width: 10px; height: 40px;
-            background: #52b788;
-            box-shadow: 10px 10px 0 #52b788, -10px 15px 0 #52b788;
+                0 -20px 0 #ff0055, 20px -20px 0 #ff0055, -20px -20px 0 #ff0055,
+                10px -30px 0 #ff5c8d, -10px -30px 0 #ff5c8d,
+                0 -10px 0 #ff0055,
+                /* Caule */
+                0 0 0 #2d6a4f, 0 10px 0 #2d6a4f, 0 20px 0 #2d6a4f,
+                0 30px 0 #2d6a4f, 0 40px 0 #2d6a4f,
+                /* Folhas */
+                10px 20px 0 #40916c, 20px 10px 0 #40916c,
+                -10px 20px 0 #40916c, -20px 10px 0 #40916c;
+            
+            animation: beat 0.8s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 10px #ff0055);
         }
 
         @keyframes beat {
-            to { transform: scale(1.15); }
+            from { transform: scale(1); filter: drop-shadow(0 0 10px #ff0055); }
+            to { transform: scale(1.1); filter: drop-shadow(0 0 20px #ff0055); }
         }
 
-        .container {
-            z-index: 2;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px;
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            letter-spacing: 4px;
+        }
+        
+        p {
+            color: #ffcad4;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        /* Player Estilizado (Vidro) */
+        .glass-player {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px;
             border-radius: 15px;
-            border: 4px solid #ff4d6d;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
-
-        .yt-player {
-            margin-top: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #52b788;
-        }
-
-        .runner {
-            position: absolute;
+        .runner-container {
+            position: fixed;
             bottom: 20px;
-            font-size: 2rem;
-            animation: run 10s linear infinite;
+            width: 100%;
+        }
+        .runner {
+            font-size: 30px;
+            position: absolute;
+            left: -50px;
+            animation: runAcross 8s linear infinite;
+        }
+        @keyframes runAcross {
+            0% { left: -50px; transform: scaleX(1); }
+            49% { transform: scaleX(1); }
+            50% { left: 100%; transform: scaleX(-1); } /* Vira pra voltar (opcional) ou recomeça */
+            100% { left: 100%; transform: scaleX(1); }
         }
 
-        @keyframes run {
-            from { left: -100px; }
-            to { left: 100%; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="background-gradient"></div>
+    
+    <div class="petals">
+        <div class="petal"></div><div class="petal"></div>
+        <div class="petal"></div><div class="petal"></div>
+        <div class="petal"></div>
+    </div>
+
+    <div id="intro-screen">
+        <button class="btn-start" onclick="iniciarExperiencia()">ABRIR 🎁</button>
+    </div>
+
+    <div class="main-content" id="main">
         <div class="pixel-tulip"></div>
-        <h1>Para quem brilha no corre</h1>
-        <p>Changes.</p>
         
-        <div class="yt-player">
-            <iframe width="280" height="157" src="https://www.youtube.com/embed/S_I_ZpHeC_A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <h1>CHANGES</h1>
+        <p>Para quem brilha no corre.</p>
+
+        <div class="glass-player">
+            <iframe width="300" height="80" 
+                src="https://www.youtube.com/embed/8E5k3yB9dM8?controls=1&modestbranding=1&rel=0" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
         </div>
     </div>
 
-    <div class="runner">🏃‍♀️💨</div>
+    <div class="runner-container">
+        <div class="runner">🏃‍♀️💨</div>
+    </div>
+
+    <script>
+        function iniciarExperiencia() {
+            var intro = document.getElementById('intro-screen');
+            var main = document.getElementById('main');
+            
+            // Some com a intro
+            intro.style.opacity = '0';
+            setTimeout(function(){ 
+                intro.style.display = 'none'; 
+                // Aparece o conteúdo
+                main.style.opacity = '1';
+            }, 1000);
+        }
+    </script>
 
 </body>
 </html>
