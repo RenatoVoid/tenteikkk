@@ -5,35 +5,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changes</title>
     <style>
-        /* --- CONFIGURAÇÕES GERAIS --- */
+        /* --- ESTILO GERAL DE ALTO NÍVEL --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            background: #0f0c29;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
         }
 
-        /* Fundo Animado */
+        /* Fundo Suave (Aurora Pastel) */
         .background-gradient {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #240b36, #c31432, #4a0072);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            opacity: 0.3;
             z-index: 0;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        /* --- TELA DE INTRO --- */
+        #intro-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+        .btn-start {
+            padding: 15px 50px;
+            font-size: 1.1rem;
+            color: #555;
+            border: 1px solid #aaa;
+            background: transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .btn-start:hover {
+            background: #555;
+            color: #fff;
         }
 
-        /* --- PÉTALAS CAINDO --- */
-        .petals {
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+
+        /* TULIPA REALISTA (SVG) */
+        .real-tulip {
+            width: 180px;
+            height: auto;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            animation: sway 4s infinite ease-in-out alternate;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes sway {
+            from { transform: rotate(-2deg); }
+            to { transform: rotate(2deg); }
+        }
+
+        h1 {
+            color: #4a4a4a;
+            font-weight: 300;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Player Minimalista */
+        .player-box {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            background: #fff;
+            padding: 5px;
+        }
+
+        /* Corredora Discreta */
+        .runner-container {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .runner {
+            font-size: 24px;
             position: absolute;
+            left: -50px;
+            animation: runSlow 12s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes runSlow {
+            0% { left: -50px; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-gradient"></div>
+
+    <div id="intro-screen">
+        <button class="btn-start" onclick="iniciar()">Ver presente</button>
+    </div>
+
+    <div class="main-content" id="main">
+        
+        <svg class="real-tulip" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="flowerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path d="M50,160 Q50,100 50,90" stroke="#74c69d" stroke-width="4" fill="none"/>
+            <path d="M50,140 Q20,110 30,80 Q45,100 50,120" fill="#52b788"/>
+            <path d="M50,150 Q80,120 70,90 Q55,110 50,130" fill="#40916c"/>
+            <path d="M30,50 C30,20 50,10 50,30 C50,10 70,20 70,50 C70,80 30,80 30,50" fill="url(#flowerGrad)"/>
+            <path d="M40,50 C40,30 50,20 60,50" fill="rgba(255,255,255,0.3)"/>
+        </svg>
+
+        <h1>O corre que te faz brilhar</h1>
+        <p>Changes</p>
+
+        <div class="player-box">
+            <iframe width="280" height="80" 
+                src="https://www.youtube.com/embed/b88Y-s6WlQ0?controls=1&rel=0&modestbranding=1" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="runner-container">
+        <div class="runner">🏃‍♀️</div>
+    </div>
+
+    <script>
+        function iniciar() {
+            var intro = document.getElementById('intro-screen');
+            var main = document.getElementById('main');
+            intro.style.opacity = '0';
+            setTimeout(function(){ 
+                intro.style.display = 'none'; 
+                main.style.opacity = '1';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
             top: -10%;
             width: 100%;
             height: 100%;
