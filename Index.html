@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para você</title>
     <style>
+        /* Estilo Void: Minimalista e Fofo */
         body {
             margin: 0;
             padding: 0;
@@ -14,51 +15,55 @@
             justify-content: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: #444;
             text-align: center;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.4);
-            padding: 30px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            width: 80%;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 40px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            width: 85%;
             max-width: 400px;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .tulipa {
-            font-size: 80px;
-            animation: pulse 2s infinite ease-in-out;
-            margin-bottom: 10px;
+            font-size: 70px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulse 2.5s infinite ease-in-out;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 10px; }
-        p { font-size: 1rem; line-height: 1.5; }
+        h1 { font-size: 1.6rem; color: #ff6b6b; margin-bottom: 10px; }
+        p { font-size: 1.1rem; line-height: 1.4; margin-bottom: 25px; }
 
         .player {
-            margin-top: 20px;
             width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
-        .corridinha {
-            font-size: 20px;
-            margin-top: 20px;
+        .runner {
             display: block;
-            animation: move 5s linear infinite;
+            margin-top: 25px;
+            font-size: 24px;
+            animation: moveRunner 8s linear infinite;
         }
 
-        @keyframes move {
-            from { transform: translateX(-100px); }
-            to { transform: translateX(100px); }
+        @keyframes moveRunner {
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(150px); }
         }
     </style>
 </head>
@@ -66,14 +71,14 @@
 
     <div class="container">
         <div class="tulipa">🌷</div>
-        <h1>Para quem não para de evoluir</h1>
-        <p>Renato aqui. Vi essa tulipa e lembrei do seu ritmo. <br> <b>Changes</b> pra acompanhar o seu corre.</p>
+        <h1>Para quem brilha correndo</h1>
+        <p>Renato aqui.<br>Vi essa tulipa e lembrei do seu corre. <b>Changes</b> pra te acompanhar no próximo treino!</p>
         
         <div class="player">
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2S6mYm87vY6Y9998p9vIas?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2S33Z5v1S99vI39H9vC4mY?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
 
-        <span class="corridinha">🏃‍♀️💨</span>
+        <div class="runner">🏃‍♀️💨</div>
     </div>
 
 </body>
