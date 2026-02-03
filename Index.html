@@ -5,52 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changes</title>
     <style>
-        /* --- ESTILO GERAL DE ALTO NÍVEL --- */
+        /* --- CONFIGURAÇÕES GERAIS --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fundo degradê inspirado nas cores de uma tulipa */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 10s ease infinite;
         }
 
-        /* Fundo Suave (Aurora Pastel) */
-        .background-gradient {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-            opacity: 0.3;
-            z-index: 0;
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* --- TELA DE INTRO --- */
+        /* --- TELA DE INTRODUÇÃO (Vidro) --- */
         #intro-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px); /* Efeito de vidro embaçado */
             z-index: 100;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s;
+            transition: all 0.8s ease-in-out;
         }
+
         .btn-start {
-            padding: 15px 50px;
-            font-size: 1.1rem;
-            color: #555;
-            border: 1px solid #aaa;
-            background: transparent;
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: #ff758c;
+            border: none;
             border-radius: 50px;
             cursor: pointer;
-            letter-spacing: 2px;
+            box-shadow: 0 10px 25px rgba(255, 117, 140, 0.5);
             text-transform: uppercase;
-            transition: all 0.3s;
+            letter-spacing: 2px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
         }
-        .btn-start:hover {
-            background: #555;
-            color: #fff;
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 117, 140, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 117, 140, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
         }
 
         /* --- CONTEÚDO PRINCIPAL --- */
@@ -62,99 +67,100 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            opacity: 0;
-            transition: opacity 1.5s ease-in;
+            opacity: 0; /* Começa invisível */
+            transform: translateY(20px);
+            transition: all 1s ease-out;
         }
 
-        /* TULIPA REALISTA (SVG) */
-        .real-tulip {
+        /* TULIPA SVG PROFISSIONAL */
+        .tulip-svg {
             width: 180px;
             height: auto;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
-            animation: sway 4s infinite ease-in-out alternate;
-            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+            animation: float 6s ease-in-out infinite;
         }
-        
-        @keyframes sway {
-            from { transform: rotate(-2deg); }
-            to { transform: rotate(2deg); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
         }
 
         h1 {
-            color: #4a4a4a;
-            font-weight: 300;
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-        p {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 40px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 1.8rem;
+            margin: 20px 0 10px 0;
             font-weight: 600;
         }
-
-        /* Player Minimalista */
-        .player-box {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            background: #fff;
-            padding: 5px;
+        p {
+            color: #fff;
+            opacity: 0.9;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
-        /* Corredora Discreta */
-        .runner-container {
+        /* Player Estilizado */
+        .player-container {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* Corredora */
+        .runner-track {
             position: fixed;
-            bottom: 20px;
+            bottom: 0;
             width: 100%;
+            height: 60px;
             pointer-events: none;
         }
         .runner {
-            font-size: 24px;
+            font-size: 30px;
             position: absolute;
+            bottom: 15px;
             left: -50px;
-            animation: runSlow 12s linear infinite;
-            opacity: 0.7;
+            animation: run 10s linear infinite;
         }
-        @keyframes runSlow {
-            0% { left: -50px; }
-            100% { left: 100%; }
+        @keyframes run {
+            from { left: -50px; }
+            to { left: 100%; }
         }
+
     </style>
 </head>
 <body>
 
-    <div class="background-gradient"></div>
-
     <div id="intro-screen">
-        <button class="btn-start" onclick="iniciar()">Ver presente</button>
+        <button class="btn-start" onclick="abrirPresente()">Abrir 🌷</button>
     </div>
 
     <div class="main-content" id="main">
         
-        <svg class="real-tulip" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+        <svg class="tulip-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <linearGradient id="flowerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="petalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ff6a88;stop-opacity:1" />
                 </linearGradient>
             </defs>
-            <path d="M50,160 Q50,100 50,90" stroke="#74c69d" stroke-width="4" fill="none"/>
-            <path d="M50,140 Q20,110 30,80 Q45,100 50,120" fill="#52b788"/>
-            <path d="M50,150 Q80,120 70,90 Q55,110 50,130" fill="#40916c"/>
-            <path d="M30,50 C30,20 50,10 50,30 C50,10 70,20 70,50 C70,80 30,80 30,50" fill="url(#flowerGrad)"/>
-            <path d="M40,50 C40,30 50,20 60,50" fill="rgba(255,255,255,0.3)"/>
+            <path d="M100,300 Q100,200 100,180" stroke="#88d8b0" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <path d="M100,280 Q60,220 70,150 Q90,200 100,240" fill="#a8e6cf"/>
+            <path d="M100,290 Q140,230 130,160 Q110,210 100,250" fill="#88d8b0"/>
+            <path d="M70,100 Q100,20 130,100 Q100,190 70,100" fill="url(#petalGradient)"/>
+            <path d="M85,100 Q100,10 115,100" fill="rgba(255,255,255,0.3)"/> 
+            <path d="M70,100 Q50,60 100,50 Q150,60 130,100" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
         </svg>
 
-        <h1>O correr que te faz brilhar</h1>
+        <h1>O corre que faz brilhar</h1>
         <p>Changes</p>
 
-        <div class="player-box">
+        <div class="player-container">
             <iframe width="280" height="80" 
-                src="https://www.youtube.com/embed/b88Y-s6WlQ0?controls=1&rel=0&modestbranding=1" 
+                src="https://www.youtube.com/embed/b88Y-s6WlQ0?controls=1&modestbranding=1&rel=0" 
                 title="YouTube video player" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -163,129 +169,30 @@
         </div>
     </div>
 
-    <div class="runner-container">
-        <div class="runner">🏃‍♀️</div>
+    <div class="runner-track">
+        <div class="runner">🏃‍♀️💨</div>
     </div>
 
     <script>
-        function iniciar() {
+        function abrirPresente() {
             var intro = document.getElementById('intro-screen');
             var main = document.getElementById('main');
+            
+            // Some com a intro
             intro.style.opacity = '0';
-            setTimeout(function(){ 
-                intro.style.display = 'none'; 
+            intro.style.pointerEvents = 'none'; // Garante que não bloqueie cliques
+            
+            // Mostra o conteúdo
+            setTimeout(function() {
+                intro.style.display = 'none'; // Remove de vez
                 main.style.opacity = '1';
-            }, 1000);
+                main.style.transform = 'translateY(0)';
+            }, 800); // Tempo sincronizado com a transição
         }
     </script>
 </body>
 </html>
-            top: -10%;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .petal {
-            position: absolute;
-            background: rgba(255, 192, 203, 0.7);
-            border-radius: 10px 0 10px 0;
-            animation: fall linear infinite;
-        }
-        .petal:nth-child(1) { left: 10%; width: 10px; height: 10px; animation-duration: 8s; }
-        .petal:nth-child(2) { left: 30%; width: 15px; height: 15px; animation-duration: 12s; animation-delay: 2s; }
-        .petal:nth-child(3) { left: 70%; width: 8px; height: 8px; animation-duration: 6s; animation-delay: 4s; }
-        .petal:nth-child(4) { left: 50%; width: 12px; height: 12px; animation-duration: 10s; animation-delay: 1s; }
-        .petal:nth-child(5) { left: 85%; width: 14px; height: 14px; animation-duration: 9s; animation-delay: 3s; }
-        @keyframes fall {
-            0% { top: -10%; transform: rotate(0deg); }
-            100% { top: 110%; transform: rotate(360deg); }
-        }
-
-        /* --- TELA DE INTRODUÇÃO --- */
-        #intro-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s;
-        }
-        .btn-start {
-            padding: 15px 40px;
-            font-size: 1.3rem;
-            color: #fff;
-            border: 2px solid #ff4d6d;
-            background: transparent;
-            cursor: pointer;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            box-shadow: 0 0 20px #ff4d6d;
-            animation: pulseBtn 2s infinite;
-        }
-        @keyframes pulseBtn {
-            0% { box-shadow: 0 0 15px #ff4d6d; scale: 1; }
-            50% { box-shadow: 0 0 30px #ff4d6d, 0 0 10px #fff; scale: 1.05; }
-            100% { box-shadow: 0 0 15px #ff4d6d; scale: 1; }
-        }
-
-        /* --- CONTEÚDO PRINCIPAL --- */
-        .main-content {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            opacity: 0;
-            transition: opacity 1.5s ease-in;
-        }
-
-        /* --- NOVA TULIPA PIXEL DETALHADA --- */
-        .pixel-tulip {
-            width: 10px; /* Unidade base do pixel */
-            height: 10px;
-            position: relative;
-            background: transparent;
-            margin-bottom: 60px;
-            
-            /* Desenho Pixel a Pixel */
-            box-shadow: 
-                /* Topo das pétalas (Rosa Claro) */
-                -20px -60px 0 #ff758f, 0 -60px 0 #ff758f, 20px -60px 0 #ff758f,
-                /* Corpo da flor (Rosa Médio) */
-                -30px -50px 0 #ff4d6d, -10px -50px 0 #ff4d6d, 10px -50px 0 #ff4d6d, 30px -50px 0 #ff4d6d,
-                -30px -40px 0 #ff4d6d, -10px -40px 0 #ff4d6d, 10px -40px 0 #ff4d6d, 30px -40px 0 #ff4d6d,
-                /* Base da flor (Rosa Escuro/Vermelho) */
-                -20px -30px 0 #c9184a, -10px -30px 0 #c9184a, 10px -30px 0 #c9184a, 20px -30px 0 #c9184a,
-                -10px -20px 0 #c9184a, 0 -20px 0 #c9184a, 10px -20px 0 #c9184a,
-
-                /* Caule (Verde Escuro) */
-                0 -10px 0 #2d6a4f, 0 0 0 #2d6a4f, 0 10px 0 #2d6a4f, 0 20px 0 #2d6a4f, 0 30px 0 #2d6a4f,
-                /* Folhas (Verde Médio) */
-                -10px 10px 0 #40916c, -20px 20px 0 #40916c, -30px 10px 0 #40916c, /* Esquerda */
-                10px 20px 0 #40916c, 20px 30px 0 #40916c, 30px 20px 0 #40916c; /* Direita */
-            
-            animation: beat 0.8s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
-            filter: drop-shadow(0 0 15px #c9184a); /* Brilho na cor da base */
-        }
-        @keyframes beat {
-            from { transform: scale(1); }
-            to { transform: scale(1.15); filter: drop-shadow(0 0 30px #ff4d6d); }
-        }
-
-        /* Frases */
-        h1 {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            letter-spacing: 2px;
-            text-align: center;
-            padding: 0 10px;
+    padding: 0 10px;
         }
         p {
             color: #ffcad4;
