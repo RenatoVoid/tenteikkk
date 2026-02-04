@@ -11,7 +11,7 @@
 
     <style>
         :root {
-            --primary-pink: #ffc4d0; /* Levemente mais claro para contraste */
+            --primary-pink: #ffc4d0;
             --glass: rgba(255, 255, 255, 0.12);
             --glass-hover: rgba(255, 255, 255, 0.25);
             --text-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -22,6 +22,7 @@
             font-family: 'Inter', sans-serif;
             background: #111;
             color: white;
+            user-select: none; /* Impede seleção de texto acidental */
         }
         
         .bg-image {
@@ -52,14 +53,14 @@
 
         .btn-start:hover {
             background: #fff; color: #000;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
             box-shadow: 0 8px 25px rgba(255,255,255,0.3);
         }
 
         .main-content {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100dvh; /* Modern fix for mobile browsers */
+            height: 100dvh;
             opacity: 0; transform: scale(0.95);
             transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1); pointer-events: none;
             gap: 24px;
@@ -72,9 +73,13 @@
             border: 1px solid rgba(255,255,255,0.15);
             animation: float 6s ease-in-out infinite;
             image-rendering: pixelated; 
-            image-rendering: crisp-edges; /* Firefox support */
+            image-rendering: crisp-edges;
+            cursor: pointer; /* Indica interatividade */
+            transition: transform 0.2s;
         }
         
+        .tulip-photo:active { transform: scale(0.95); }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
@@ -102,7 +107,6 @@
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             display: flex; align-items: center; gap: 16px;
             cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            user-select: none;
         }
 
         .custom-player:hover {
@@ -112,7 +116,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .custom-player:active { transform: scale(0.98); }
+        .custom-player:active { transform: scale(0.95); }
 
         #play-icon { font-size: 1.2rem; min-width: 20px; text-align: center; }
 
@@ -128,6 +132,23 @@
             transform: scaleX(-1); opacity: 0.7; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
         @keyframes run { from { left: -60px; } to { left: 110vw; } }
+
+        /* --- ENGINE DE PARTÍCULAS (NOVO) --- */
+        .heart {
+            position: fixed;
+            color: #ffb7c5;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatUp 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-20px) scale(1); }
+            100% { transform: translateY(-150px) scale(1.2) rotate(20deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -139,7 +160,7 @@
     </div>
 
     <main class="main-content" id="main">
-        <img src="https://static.vecteezy.com/ti/vetor-gratis/p2/39642877-tulipa-flor-com-espumante-8-mordeu-pixel-arte-estilo-vetor.jpg" class="tulip-photo" alt="Tulipa Pixel Art">
+        <img src="https://static.vecteezy.com/ti/vetor-gratis/p2/39642877-tulipa-flor-com-espumante-8-mordeu-pixel-arte-estilo-vetor.jpg" class="tulip-photo" id="tulip-trigger" alt="Tulipa Pixel Art">
         
         <div class="info-track">
             <h1>O correr que faz você brilhar</h1>
@@ -161,6 +182,7 @@
     </div>
     
     <script>
+        // --- LÓGICA DO PLAYER YOUTUBE ---
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -183,9 +205,43 @@
             if (event.data == YT.PlayerState.PLAYING) {
                 icon.innerHTML = "⏸";
                 label.innerText = "PAUSAR MÚSICA";
+                createHeartExplosion(); // Efeito extra quando a música começa
             } else {
                 icon.innerHTML = "▶";
                 label.innerText = "OUVIR MÚSICA";
+            }
+        }
+
+        // --- SISTEMA DE PARTÍCULAS (O "BONITIN") ---
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = Math.random() > 0.5 ? '💖' : '✨'; // Alterna entre coração e brilho
+            
+            // Randomização da posição inicial
+            const randomX = (Math.random() - 0.5) * 60; 
+            
+            heart.style.left = (x + randomX) + 'px';
+            heart.style.top = y + 'px';
+            
+            // Randomização do tamanho
+            const size = Math.random() * 1.5 + 0.5;
+            heart.style.fontSize = (20 * size) + 'px';
+            
+            document.body.appendChild(heart);
+
+            // Limpeza de memória
+            setTimeout(() => { heart.remove(); }, 2500);
+        }
+
+        function createHeartExplosion() {
+            // Pega o centro da tela
+            const w = window.innerWidth / 2;
+            const h = window.innerHeight / 2;
+            
+            // Gera 15 partículas
+            for(let i=0; i<15; i++) {
+                setTimeout(() => createHeart(w, h + 100), i * 100);
             }
         }
 
@@ -194,31 +250,44 @@
             var intro = document.getElementById('intro-screen');
             var main = document.getElementById('main');
             var playTrigger = document.getElementById('play-trigger');
+            var tulip = document.getElementById('tulip-trigger');
             
             function ativarSite() {
                 intro.style.opacity = '0';
                 intro.style.pointerEvents = 'none';
-                
                 main.style.opacity = '1';
                 main.style.transform = 'scale(1)';
                 main.style.pointerEvents = 'all';
                 
-                // Tenta iniciar o áudio já no clique do botão de intro (mobile policy hack)
                 if(player && typeof player.playVideo === "function") {
                     player.playVideo();
-                    setTimeout(() => player.pauseVideo(), 100); // Só pra "aquecer" o buffer
+                    setTimeout(() => player.pauseVideo(), 100);
                 }
-                
                 setTimeout(() => { intro.style.display = 'none'; }, 600);
             }
 
             btn.onclick = ativarSite;
 
-            playTrigger.onclick = function() {
+            playTrigger.onclick = function(e) {
                 if(!player) return;
                 var state = player.getPlayerState();
-                if (state == 1) { player.pauseVideo(); } else { player.playVideo(); }
+                if (state == 1) { 
+                    player.pauseVideo(); 
+                } else { 
+                    player.playVideo(); 
+                    // Gera corações na posição do clique
+                    for(let i=0; i<8; i++) {
+                        setTimeout(() => createHeart(e.clientX, e.clientY), i * 80);
+                    }
+                }
             };
+
+            // Easter Egg: Clicar na tulipa também solta corações
+            tulip.onclick = function(e) {
+                for(let i=0; i<5; i++) {
+                    setTimeout(() => createHeart(e.clientX, e.clientY), i * 100);
+                }
+            }
         });
     </script>
 </body>
