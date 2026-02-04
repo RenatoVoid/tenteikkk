@@ -22,7 +22,7 @@
             font-family: 'Inter', sans-serif;
             background: #111;
             color: white;
-            user-select: none; /* Impede seleção de texto acidental */
+            user-select: none;
         }
         
         .bg-image {
@@ -74,7 +74,7 @@
             animation: float 6s ease-in-out infinite;
             image-rendering: pixelated; 
             image-rendering: crisp-edges;
-            cursor: pointer; /* Indica interatividade */
+            cursor: pointer;
             transition: transform 0.2s;
         }
         
@@ -100,13 +100,16 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
+        /* --- PLAYER COM BARRA DE PROGRESSO --- */
         .custom-player {
+            position: relative; /* Necessário para posicionar a barra dentro */
             background: var(--glass);
             padding: 16px 32px; border-radius: 50px;
             border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             display: flex; align-items: center; gap: 16px;
             cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden; /* Garante que a barra não vaze as bordas redondas */
         }
 
         .custom-player:hover {
@@ -118,7 +121,21 @@
 
         .custom-player:active { transform: scale(0.95); }
 
-        #play-icon { font-size: 1.2rem; min-width: 20px; text-align: center; }
+        /* Barra de Progresso Background (Invisivel/Fundo) */
+        .progress-track {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 4px;
+            background: rgba(255,255,255,0.1);
+        }
+        /* Barra de Progresso Fill (O que enche) */
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: var(--primary-pink);
+            transition: width 0.5s linear; /* Animação suave */
+            box-shadow: 0 0 10px var(--primary-pink);
+        }
+
+        #play-icon { font-size: 1.2rem; min-width: 20px; text-align: center; z-index: 2; }
+        .player-text { font-size: 0.85rem; letter-spacing: 1.5px; font-weight: 600; z-index: 2; }
 
         #youtube-player { position: absolute; visibility: hidden; pointer-events: none; }
 
@@ -133,7 +150,7 @@
         }
         @keyframes run { from { left: -60px; } to { left: 110vw; } }
 
-        /* --- ENGINE DE PARTÍCULAS (NOVO) --- */
+        /* --- PARTÍCULAS --- */
         .heart {
             position: fixed;
             color: #ffb7c5;
@@ -169,7 +186,11 @@
 
         <div class="custom-player" id="play-trigger" role="button" aria-label="Tocar música">
             <span id="play-icon">▶</span>
-            <span style="font-size: 0.85rem; letter-spacing: 1.5px; font-weight: 600;">OUVIR MÚSICA</span>
+            <span class="player-text">OUVIR MÚSICA</span>
+            
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
         </div>
 
         <div id="youtube-player">
@@ -182,13 +203,14 @@
     </div>
     
     <script>
-        // --- LÓGICA DO PLAYER YOUTUBE ---
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         var player;
+        var progressInterval;
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('video-placeholder', {
                 height: '0', width: '0',
@@ -200,46 +222,59 @@
 
         function onPlayerStateChange(event) {
             var icon = document.getElementById('play-icon');
-            var label = document.querySelector('#play-trigger span:last-child');
+            var label = document.querySelector('.player-text');
             
             if (event.data == YT.PlayerState.PLAYING) {
                 icon.innerHTML = "⏸";
                 label.innerText = "PAUSAR MÚSICA";
-                createHeartExplosion(); // Efeito extra quando a música começa
+                createHeartExplosion();
+                startProgressLoop(); // Começa a atualizar a barra
             } else {
                 icon.innerHTML = "▶";
                 label.innerText = "OUVIR MÚSICA";
+                stopProgressLoop(); // Para de atualizar para economizar CPU
             }
         }
 
-        // --- SISTEMA DE PARTÍCULAS (O "BONITIN") ---
+        // Lógica da Barra de Progresso
+        function startProgressLoop() {
+            stopProgressLoop(); // Limpa anterior se houver
+            progressInterval = setInterval(function() {
+                if(player && player.getCurrentTime) {
+                    var current = player.getCurrentTime();
+                    var duration = player.getDuration();
+                    if(duration > 0) {
+                        var percent = (current / duration) * 100;
+                        document.getElementById('progress-fill').style.width = percent + '%';
+                    }
+                }
+            }, 500); // Atualiza a cada meio segundo
+        }
+
+        function stopProgressLoop() {
+            clearInterval(progressInterval);
+        }
+
+        // Sistema de Partículas
         function createHeart(x, y) {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = Math.random() > 0.5 ? '💖' : '✨'; // Alterna entre coração e brilho
+            heart.innerHTML = Math.random() > 0.5 ? '💖' : '✨';
             
-            // Randomização da posição inicial
             const randomX = (Math.random() - 0.5) * 60; 
-            
             heart.style.left = (x + randomX) + 'px';
             heart.style.top = y + 'px';
             
-            // Randomização do tamanho
             const size = Math.random() * 1.5 + 0.5;
             heart.style.fontSize = (20 * size) + 'px';
             
             document.body.appendChild(heart);
-
-            // Limpeza de memória
             setTimeout(() => { heart.remove(); }, 2500);
         }
 
         function createHeartExplosion() {
-            // Pega o centro da tela
             const w = window.innerWidth / 2;
             const h = window.innerHeight / 2;
-            
-            // Gera 15 partículas
             for(let i=0; i<15; i++) {
                 setTimeout(() => createHeart(w, h + 100), i * 100);
             }
@@ -275,14 +310,12 @@
                     player.pauseVideo(); 
                 } else { 
                     player.playVideo(); 
-                    // Gera corações na posição do clique
                     for(let i=0; i<8; i++) {
                         setTimeout(() => createHeart(e.clientX, e.clientY), i * 80);
                     }
                 }
             };
 
-            // Easter Egg: Clicar na tulipa também solta corações
             tulip.onclick = function(e) {
                 for(let i=0; i<5; i++) {
                     setTimeout(() => createHeart(e.clientX, e.clientY), i * 100);
